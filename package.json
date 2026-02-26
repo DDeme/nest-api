@@ -21,7 +21,9 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "postman:spec": "curl http://localhost:3000/api-json -o postman/spec.json",
+    "postman:create": "yarn openapi2postmanv2 -s ./postman/spec.json -o ./postman/collection.json -p"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -32,6 +34,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
     "drizzle-orm": "^0.45.1",
+    "openapi-to-postmanv2": "^6.0.0",
     "postgres": "^3.4.8",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"

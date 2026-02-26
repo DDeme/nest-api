@@ -57,6 +57,33 @@ $ yarn run test:e2e
 $ yarn run test:cov
 ```
 
+## CI/CD
+
+This project uses GitHub Actions for continuous integration and code coverage reporting.
+
+### Workflows
+
+- **Unit Tests**: Runs on every push and PR with linting, type checking, and coverage
+- **E2E Tests**: Runs after unit tests pass
+- **Coverage Reports**: Automatically uploaded to Codecov
+
+### Setup
+
+To enable coverage reporting:
+
+1. Connect your repository to [Codecov](https://codecov.io)
+2. Add `CODECOV_TOKEN` to your GitHub repository secrets
+3. Coverage reports will be automatically posted on pull requests
+
+### Badges
+
+Add these badges to your README:
+
+```markdown
+![CI](https://github.com/your-username/nest-api/workflows/Unit%20Tests/badge.svg)
+![Coverage](https://codecov.io/gh/your-username/nest-api/branch/main/graph/badge.svg)
+```
+
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.

@@ -1,35 +1,64 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { eq } from 'drizzle-orm';
+import { DRIZZLE } from '../database/drizzle.module';
+import type { DrizzleDB } from '../database/drizzle.module';
+import { questions } from '../database/schema';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { UpdateQuestionDto } from './dto/update-question.dto';
-import { Question } from './entities/question.entity';
 
 @Injectable()
 export class QuestionsService {
-  create(createQuestionDto: CreateQuestionDto) {
-    return 'This action adds a new question';
+  constructor(@Inject(DRIZZLE) private readonly db: DrizzleDB) {}
+
+  async create(createQuestionDto: CreateQuestionDto) {
+    const [question] = await this.db
+      .insert(questions)
+      .values(createQuestionDto)
+      .returning();
+    return question;
   }
 
-  findAll() {
-    return `This action returns all questions`;
+  async findAll() {
+    return this.db.select().from(questions);
   }
 
-  findOne(id: number): Question {
-    return {
-      id: id,
-      title: 'Sample Question Title',
-      type: 'multiple-choice',
-      description: 'This is a description for the sample question.',
-      timeout: 30,
-      choices: ['Option A', 'Option B', 'Option C'],
-      question: 'What is the capital of France?',
-    };
+  async findOne(id: number) {
+    const [question] = await this.db
+      .select()
+      .from(questions)
+      .where(eq(questions.id, id));
+
+    if (!question) {
+      throw new NotFoundException(`Question with id ${id} not found`);
+    }
+
+    return question;
   }
 
-  update(id: number, updateQuestionDto: UpdateQuestionDto) {
-    return `This action updates a #${id} question`;
+  async update(id: number, updateQuestionDto: UpdateQuestionDto) {
+    const [question] = await this.db
+      .update(questions)
+      .set(updateQuestionDto)
+      .where(eq(questions.id, id))
+      .returning();
+
+    if (!question) {
+      throw new NotFoundException(`Question with id ${id} not found`);
+    }
+
+    return question;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} question`;
+  async remove(id: number) {
+    const [question] = await this.db
+      .delete(questions)
+      .where(eq(questions.id, id))
+      .returning();
+
+    if (!question) {
+      throw new NotFoundException(`Question with id ${id} not found`);
+    }
+
+    return question;
   }
 }

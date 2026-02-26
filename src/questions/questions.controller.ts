@@ -10,7 +10,6 @@ import {
 import { QuestionsService } from './questions.service';
 import { CreateQuestionDto } from './dto/create-question.dto';
 import { UpdateQuestionDto } from './dto/update-question.dto';
-import { Question } from './entities/question.entity';
 
 @Controller('questions')
 export class QuestionsController {
@@ -27,7 +26,7 @@ export class QuestionsController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Question {
+  findOne(@Param('id') id: string) {
     return this.questionsService.findOne(+id);
   }
 
